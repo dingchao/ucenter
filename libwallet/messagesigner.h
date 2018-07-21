@@ -22,6 +22,7 @@ public:
     /// Sign the message, returns true if successful
     static bool SignMessage(const std::string strMessage, std::vector<unsigned char>& vchSigRet, const CKey key);
 	static bool SignMessage(const std::string strMessage, const int64_t timestamps, std::vector<unsigned char>& vchSigRet, const CKey key);
+    static bool SignMessage(const std::string txid, const int32_t index, const std::string strMessage, const int64_t validTimes, std::vector<unsigned char>& vchSigRet, const CKey key);
     /// Verify the message signature, returns true if succcessful
     static bool VerifyMessage(const CPubKey pubkey, const std::vector<unsigned char>& vchSig, const std::string strMessage, std::string& strErrorRet);
 };

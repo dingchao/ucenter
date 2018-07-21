@@ -111,6 +111,24 @@ std::string SignMessage( COutPoint vin, int64_t timeStamps)
     return HexStr(vchSigRet);
 }
 
+// sign for register certificate
+std::string  SignMessage( std::string txid, int32_t index, std::string addr, int64_t validdate)
+{
+   CKey keyRet;
+   CPubKey pubkeyRet;
+   GetKeyFromString(  keyRet,  pubkeyRet,  g_privkeystr,   g_pubkeystr ) ;
+    
+   CPubKey testKey(ParseHex(g_pubkeystr));
+
+    CMessageSigner messSign;
+
+    std::vector<unsigned char> vchSigRet;
+    std::vector<unsigned char> vchkey;
+
+    messSign.SignMessage(txid, index, addr, validdate, vchSigRet, keyRet);
+
+    return HexStr(vchSigRet);
+}
 
 int   ParseQuest(const TcpConnectionPtr & tcpcli,const std::string &buf, LengthHeaderCodec& codec )
 {
@@ -247,6 +265,9 @@ void ReadAllNodeToNet(sql::Connection * con,std::vector<CMstNodeData>& vecnode )
         AddMasterNodeMemory(mnVin, mstnode._validflag);
         cout<<"master tx  "<< mstnode._txid << " vouid " << mstnode._voutid <<" hostname " << mstnode._hostname << " hostip  "<< mstnode._hostip <<endl;
         i++;
+	std::string pubkey("89583f4a4621c64905ded004443191e3da345091");
+	cout<<"certificate:" <<SignMessage(mstnode._txid, mstnode._voutid, pubkey, mstnode._licperiod)<<endl;
+
     }
 
     cout<<"total "<<i<<" record"<<endl;
