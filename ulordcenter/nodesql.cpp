@@ -207,7 +207,8 @@ int   ParseQuest(const TcpConnectionPtr & tcpcli,const std::string &buf, LengthH
         oa << node;//序列化到一个ostringstream里面  
     } 
     std::string content = os.str();//content保存了序列化后的数据。  
-    muduo::StringPiece message(content);
+    muduo::StringPiece message(content); 
+    cout <<"sendmessage:" <<content<<endl;
     //codec.send(get_pointer(*tcpcli), message);
     codec.send(tcpcli, message);
     cout << "codes send finished "   << endl;
@@ -256,7 +257,7 @@ void ReadAllNodeToNet(sql::Connection * con,std::vector<CMstNodeData>& vecnode )
         mstnode._hostip    = resultSet->getString(8);
         mstnode._validflag = resultSet->getInt(11);
         mstnode._licperiod = resultSet->getInt(12);
-        mstnode._licence   = resultSet->getInt(13);
+        mstnode._licence   = resultSet->getString(13);
         vecnode.push_back(mstnode);
 
         uint256 txid;
@@ -265,7 +266,7 @@ void ReadAllNodeToNet(sql::Connection * con,std::vector<CMstNodeData>& vecnode )
         AddMasterNodeMemory(mnVin, mstnode._validflag);
         cout<<"master tx  "<< mstnode._txid << " vouid " << mstnode._voutid <<" hostname " << mstnode._hostname << " hostip  "<< mstnode._hostip <<endl;
         i++;
-	std::string pubkey("89583f4a4621c64905ded004443191e3da345091");
+	std::string pubkey("daae3b616aeab7613938fe82f881a866eea75376");
 	cout<<"certificate:" <<SignMessage(mstnode._txid, mstnode._voutid, pubkey, mstnode._licperiod)<<endl;
 
     }
@@ -324,7 +325,7 @@ void  ReadMasterNodeToNet(sql::Connection * con, std::string txid, unsigned int 
         mstnode._hostip    = resultSet->getString(8);
         mstnode._validflag = resultSet->getInt(11);
         mstnode._licperiod = resultSet->getInt(12);
-        mstnode._licence   = resultSet->getInt(13);
+        mstnode._licence   = resultSet->getString(13);
         cout<<"master txid "<<  mstnode._txid << " voutid " << mstnode._voutid  << " hostname " << mstnode._hostname << " hostip "<< mstnode._hostip << " validflag " << mstnode._validflag <<endl;
         vecnode.push_back(mstnode);
         i++;
